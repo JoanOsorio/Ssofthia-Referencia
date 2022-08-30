@@ -4,7 +4,7 @@ CREATE DATABASE Ssofthia-Referencia;
 
 -- DROP TABLE IF EXISTS public."Departamentos";
 
-CREATE TABLE public."Departamentos"
+CREATE TABLE "Departamentos"
 (
     id smallint NOT NULL,
     nombre character varying(250) NOT NULL,
@@ -48,18 +48,15 @@ INSERT INTO public."Departamentos" (id, nombre) VALUES
 (32, 'Vaupes'),
 (33, 'Vichada');
 
--- Table: public.Municipios
 
--- DROP TABLE IF EXISTS public."Municipios";
-
-CREATE TABLE public."Municipios"
+CREATE TABLE "Municipios"
 (
     id smallint NOT NULL,
-    nombre character varying(250) COLLATE pg_catalog."default" NOT NULL,
+    nombre character varying(250) NOT NULL,
     CONSTRAINT "Municipios_pkey" PRIMARY KEY (id)
 )
 
-ALTER TABLE public."Municipios"
+ALTER TABLE "Municipios"
   ADD CONSTRAINT "Municipios_fk_Deptos" FOREIGN KEY ("depto_id") REFERENCES public."Departamentos" ("id");
 
 -- Insert Into Municipios
@@ -1192,6 +1189,61 @@ INSERT INTO public."Municipios" (id, nombre, depto_id) VALUES
 (1125,  'SAN JOSE DE OCUNE', 33),
 (1126,  'CUMARIBO', 33);
 
+-- 
+
+CREATE TABLE "Regimen_Eps" (
+	id smallint NOT NULL,
+	nombre_regimen character varying(100) NOT NULL,
+	CONSTRAINT "Regimen_pkey" PRIMARY KEY (id)
+);
+
+INSERT INTO public."Regimen_Eps" (id, nombre_regimen) VALUES
+(1, 'Contributivo'),
+(2, 'Subsidiado'),
+(3, 'Especial');
+
+--
+
+CREATE TABLE "Tipo_Documentos" (
+	id smallint NOT NULL,
+	codigo character varying(10) NOT NULL,
+	descripcion character varying(200) NOT NULL,
+	CONSTRAINT "tipdoc_pkey" PRIMARY KEY (id)
+);
+
+INSERT INTO public."Tipo_Documentos" (id, codigo, descripcion) VALUES
+(1, 'ASI', 'Adulto sin Identificación'),
+(2, 'CC', 'Cédula de Ciudadanía'),
+(3, 'CE', 'Cédula de Extanjería'),
+(4, 'CI', 'Cédula de Identidad'),
+(5, 'MSI', 'Menor sin identificación'),
+(6, 'NU', 'Número Unico de identificación'),
+(7, 'PA', 'Pasaporte'),
+(8, 'RC', 'Registro Civil'),
+(9, 'TI', 'Tarjeta de Identidad'),
+(10, 'RU', 'Registro Único'),
+(11, 'NIT', 'Número de Identificación Tributaria'),
+(12, 'PE', 'Permiso Especial de Permanencia'),
+(13, 'SI', 'Sin Identificación'),
+(14, 'CN', 'Certificado de Nacido Vivo'),
+(15, 'DE', 'Documento Extranjero'),
+(16, 'SC', 'Salvoconducto');
+
+--
+
+CREATE TABLE "Tipo_Atenciones" (
+	id smallint NOT NULL,
+	nombre character varying(250) NOT NULL,
+	CONSTRAINT "tipatn_pkey" PRIMARY KEY (id)
+);
+
+INSERT INTO public."Tipo_Atenciones" (id, nombre) VALUES
+(1, 'Ambulatorio'),
+(2, 'Apoyo Diagnostico'),
+(3, 'Sala General'),
+(4, 'Urgencias'),
+(5, '(UCIN) Unidad de Cuidado Intermedio '),
+(6, '(UCI) Unidad de Cuidado Intensivo ');
 
 
 
