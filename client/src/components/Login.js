@@ -1,5 +1,7 @@
+import {Button} from "@mui/material";
+
 export default function Login() {
   return (
-    <div>Login</div>
+    <Button variant="contained">Login</Button>
   )
 }
