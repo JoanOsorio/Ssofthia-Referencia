@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const {getReferencias, getReferencia, createReferencia, updateReferencia, deleteReferencia} = require('../controllers/ref.controller')
 const pool = require('../database');
 
 const router = Router();
@@ -10,24 +11,14 @@ router.get('/', async (req, res) => {
     res.json('executed');
 });
 
-router.get('/SS-Referencia/Login',(req, res) => {
+router.get('/Login',(req, res) => {
     res.send('Login');
 });
 
-router.get('/SS-Referencia/Referencias',(req, res) => {
-    res.send('Referencias');
-});
-
-router.post('/SS-Referencia/Referencias',(req, res) => {
-    res.send('Referencias post');
-})
-
-router.put('/SS-Referencia/Referencias',(req, res) => {
-    res.send('Referencias put');
-})
-
-router.delete('/SS-Referencia/Referencias',(req, res) => {
-    res.send('Referencias delete');
-})
+router.get('/Referencias', getReferencias);
+router.get('/Referencia/', getReferencia);
+router.post('/Referencias', createReferencia);
+router.put('/Referencias', updateReferencia);
+router.delete('/Referencias', deleteReferencia);
 
 module.exports = router;
