@@ -13,7 +13,7 @@ CREATE TABLE "Departamentos"
 
 -- Insert Into Departamentos 
 
-INSERT INTO public."Departamentos" (id, nombre) VALUES
+INSERT INTO "Departamentos" (id, nombre) VALUES
 (1, 'Antioquia'),
 (2, 'Atlantico'),
 (3, 'Bogotá D.C'),
@@ -61,7 +61,7 @@ ALTER TABLE "Municipios"
 
 -- Insert Into Municipios
 
-INSERT INTO public."Municipios" (id, nombre, depto_id) VALUES
+INSERT INTO "Municipios" (id, nombre, depto_id) VALUES
 (1, 'MEDELLIN', 1),
 (2, 'ABEJORRAL', 1),
 (3, 'ABRIAQUI', 1),
@@ -1197,10 +1197,13 @@ CREATE TABLE "Regimen_Eps" (
 	CONSTRAINT "Regimen_pkey" PRIMARY KEY (id)
 );
 
-INSERT INTO public."Regimen_Eps" (id, nombre_regimen) VALUES
+INSERT INTO "Regimen_Eps" (id, nombre_regimen) VALUES
 (1, 'Contributivo'),
 (2, 'Subsidiado'),
-(3, 'Especial');
+(3, 'Especial'),
+(4, 'Vinculado'),
+(5, 'Sin Afiliación'),
+(6, 'Otro')
 
 --
 
@@ -1211,23 +1214,17 @@ CREATE TABLE "Tipo_Documentos" (
 	CONSTRAINT "tipdoc_pkey" PRIMARY KEY (id)
 );
 
-INSERT INTO public."Tipo_Documentos" (id, codigo, descripcion) VALUES
-(1, 'ASI', 'Adulto sin Identificación'),
-(2, 'CC', 'Cédula de Ciudadanía'),
-(3, 'CE', 'Cédula de Extanjería'),
-(4, 'CI', 'Cédula de Identidad'),
-(5, 'MSI', 'Menor sin identificación'),
-(6, 'NU', 'Número Unico de identificación'),
-(7, 'PA', 'Pasaporte'),
-(8, 'RC', 'Registro Civil'),
-(9, 'TI', 'Tarjeta de Identidad'),
-(10, 'RU', 'Registro Único'),
-(11, 'NIT', 'Número de Identificación Tributaria'),
-(12, 'PE', 'Permiso Especial de Permanencia'),
-(13, 'SI', 'Sin Identificación'),
-(14, 'CN', 'Certificado de Nacido Vivo'),
-(15, 'DE', 'Documento Extranjero'),
-(16, 'SC', 'Salvoconducto');
+INSERT INTO "Tipo_Documentos" (id, codigo, descripcion) VALUES
+(1, 'ASI', 'Adulto sin Identificación'),	
+(2, 'CC', 'Cédula de Ciudadanía'),	
+(3, 'CE', 'Cédula de Extanjería'),	
+(4,	'CN', 'Certificado de Nacido Vivo'),	
+(5,	'NU', 'Número Unico de identificación'),	
+(6,	'PA', 'Pasaporte'),	
+(7,	'PE', 'Permiso Especial de Permanencia'),	
+(8,	'RC', 'Registro Civil'),	
+(9,	'SI', 'Sin Identificación'),	
+(10, 'TI', 'Tarjeta de Identidad');	
 
 --
 
@@ -1237,17 +1234,128 @@ CREATE TABLE "Tipo_Atenciones" (
 	CONSTRAINT "tipatn_pkey" PRIMARY KEY (id)
 );
 
-INSERT INTO public."Tipo_Atenciones" (id, nombre) VALUES
+INSERT INTO "Tipo_Atenciones" (id, nombre) VALUES
 (1, 'Ambulatorio'),
 (2, 'Apoyo Diagnostico'),
 (3, 'Sala General'),
 (4, 'Urgencias'),
-(5, '(UCIN) Unidad de Cuidado Intermedio '),
-(6, '(UCI) Unidad de Cuidado Intensivo ');
+(5, '(UCIN) Unidad de Cuidado Intermedio'),
+(6, '(UCI) Unidad de Cuidado Intensivo');
 
+--
 
+CREATE TABLE "Eps" (
+	id smallint NOT NULL,
+	nombre character varying(250) NOT NULL,
+	CONSTRAINT "eps_pkey" PRIMARY KEY (id)
+);
 
+INSERT INTO "Eps" (id, nombre) VALUES
+(1, 'Nueva EPS'),
+(2, 'Asmet Salud'),
+(3, 'Salud Total'),
+(4, 'EPS Sura'),
+(5, 'EPS Sanitas'),
+(6, 'A.I.C EPSI'),
+(7, 'Mallamas EPSI'),
+(8, 'Famisanar'),
+(9, 'Coosalud'),
+(10, 'S.O.S'),
+(11, 'Cosmitet'),
+(12, 'DTSC'),
+(13, 'Ferrocarriles Nacionales'),
+(14, 'Policia');
 
+--
+
+CREATE TABLE "Estado_Referencia"(
+	id smallint NOT NULL,
+	nombre character varying(100) NOT NULL,
+	CONSTRAINT "estref_pkey" PRIMARY KEY (id)
+);
+
+INSERT INTO "Estado_Referencia" (id, nombre) VALUES
+(1, 'Pendiente'),
+(2, 'Aceptado'),
+(3, 'Rechazado');
+
+--
+
+CREATE TABLE "Tipos_Rechazo" (
+	id smallint NOT NULL,
+	nombre character varying(500) NOT NULL,
+	CONSTRAINT "tiprech_pkey" PRIMARY KEY (id)
+);
+
+INSERT INTO "Tipos_Rechazo" (id, nombre) VALUES 
+(1, 'No disponibilidad de Camas'),
+(2, 'No convenino con EPS'),
+(3, 'No se dispone de la especialidad');
+
+--
+
+CREATE TABLE "Diagnosticos" (
+	id integer NOT NULL,
+	codigo character varying(50) NOT NULL,
+	descripcion text NOT NULL,
+	CONSTRAINT "diag_pkey" PRIMARY KEY (id)
+);
+
+--Falta Insertar Los registros de los diagnosticos
+
+CREATE TABLE "Especialidades" (
+	id smallint NOT NULL,
+	nombre character varying(500) NOT NULL,
+	CONSTRAINT "esp_pkey" PRIMARY KEY (id)
+);
+
+INSERT INTO "Especialidades" (id, nombre) VALUES
+(1, 'Anestesia'),
+(2, 'Cardiología'),
+(3, 'Cirugía Bariátrica'),
+(4, 'Cirugía Cardiovascular'),
+(5, 'Cirugía de Cabeza y Cuello'),
+(6, 'Cirugía de Otología'),
+(7, 'Cirugía de Tórax'),
+(8, 'Cirugía Endovascular Neurológica'),
+(9, 'Cirugía Gastrointestinal'),
+(10, 'Cirugía General'),
+(11, 'Cirugía Ginecológica'),
+(12, 'Cirugía Maxilofacial'),
+(13, 'Cirugía Ortopédica'),
+(14, 'Cirugía Otorrinolaringología'),
+(15, 'Cirugía Plástica y Estética'),
+(16, 'Cirugía Urológica'),
+(17, 'Cirugía Vascular'),
+(18, 'Cirugía Vascular y Angiológica'),
+(19, 'Dermatología'),
+(20, 'Dolor y Cuidados Paliativos'),
+(21, 'Electrofisiología'),
+(22, 'Endocrinología'),
+(23, 'Fisioterapia'),
+(24, 'Fonoaudiología y/o Terapia del Lenguaje'),
+(25, 'Gastroenterología'),
+(26, 'Genética'),
+(27, 'Geriatría'),
+(28, 'Ginecología Oncológica'),
+(29, 'Hemodinamia e Intervencionismo'),
+(30, 'Infectología'),
+(31, 'Medicina Física y Rehabilitación'),
+(32, 'Medicina Interna'),
+(33, 'Neumología'),
+(34, 'Neurocirugía'),
+(35, 'Neurología'),
+(36, 'Nutrición y Dietética'),
+(37, 'Ortopedia y/o Traumatología'),
+(38, 'Otorrinolaringología'),
+(39, 'Psicología'),
+(40, 'Psiquiatría'),
+(41, 'Reumatología'),
+(42, 'Terapia Ocupacional'),
+(43, 'Terapia Respiratoria'),
+(44, 'Urología');
+
+--
 
 
 
