@@ -70,7 +70,7 @@ function validateToken(req, res, next){
 }
 
 
-router.get('/Referencias', validateToken,getReferencias);
+router.get('/Referencias', validateToken, getReferencias);
 router.get('/Referencia/', getReferencia);
 router.post('/Referencias', createReferencia);
 router.put('/Referencias', updateReferencia);

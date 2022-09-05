@@ -6,10 +6,10 @@ CREATE DATABASE Ssofthia-Referencia;
 
 CREATE TABLE "Departamentos"
 (
-    id smallint NOT NULL,
+    id serial NOT NULL,
     nombre character varying(250) NOT NULL,
     CONSTRAINT "Departamentos_pkey" PRIMARY KEY (id)
-)
+);
 
 -- Insert Into Departamentos 
 
@@ -51,10 +51,11 @@ INSERT INTO "Departamentos" (id, nombre) VALUES
 
 CREATE TABLE "Municipios"
 (
-    id smallint NOT NULL,
+    id serial NOT NULL,
     nombre character varying(250) NOT NULL,
+	depto_id integer NOT NULL,
     CONSTRAINT "Municipios_pkey" PRIMARY KEY (id)
-)
+);
 
 ALTER TABLE "Municipios"
   ADD CONSTRAINT "Municipios_fk_Deptos" FOREIGN KEY ("depto_id") REFERENCES public."Departamentos" ("id");
@@ -1192,7 +1193,7 @@ INSERT INTO "Municipios" (id, nombre, depto_id) VALUES
 -- 
 
 CREATE TABLE "Regimen_Eps" (
-	id smallint NOT NULL,
+	id serial NOT NULL,
 	nombre_regimen character varying(100) NOT NULL,
 	CONSTRAINT "Regimen_pkey" PRIMARY KEY (id)
 );
@@ -1208,7 +1209,7 @@ INSERT INTO "Regimen_Eps" (id, nombre_regimen) VALUES
 --
 
 CREATE TABLE "Tipo_Documentos" (
-	id smallint NOT NULL,
+	id serial NOT NULL,
 	codigo character varying(10) NOT NULL,
 	descripcion character varying(200) NOT NULL,
 	CONSTRAINT "tipdoc_pkey" PRIMARY KEY (id)
@@ -1229,7 +1230,7 @@ INSERT INTO "Tipo_Documentos" (id, codigo, descripcion) VALUES
 --
 
 CREATE TABLE "Tipo_Atenciones" (
-	id smallint NOT NULL,
+	id serial NOT NULL,
 	nombre character varying(250) NOT NULL,
 	CONSTRAINT "tipatn_pkey" PRIMARY KEY (id)
 );
@@ -1245,7 +1246,7 @@ INSERT INTO "Tipo_Atenciones" (id, nombre) VALUES
 --
 
 CREATE TABLE "Eps" (
-	id smallint NOT NULL,
+	id serial NOT NULL,
 	nombre character varying(250) NOT NULL,
 	CONSTRAINT "eps_pkey" PRIMARY KEY (id)
 );
@@ -1269,7 +1270,7 @@ INSERT INTO "Eps" (id, nombre) VALUES
 --
 
 CREATE TABLE "Estado_Referencia"(
-	id smallint NOT NULL,
+	id serial NOT NULL,
 	nombre character varying(100) NOT NULL,
 	CONSTRAINT "estref_pkey" PRIMARY KEY (id)
 );
@@ -1281,13 +1282,13 @@ INSERT INTO "Estado_Referencia" (id, nombre) VALUES
 
 --
 
-CREATE TABLE "Tipos_Rechazo" (
-	id smallint NOT NULL,
+CREATE TABLE "Tipo_Rechazos" (
+	id serial NOT NULL,
 	nombre character varying(500) NOT NULL,
 	CONSTRAINT "tiprech_pkey" PRIMARY KEY (id)
 );
 
-INSERT INTO "Tipos_Rechazo" (id, nombre) VALUES 
+INSERT INTO "Tipo_Rechazos" (id, nombre) VALUES 
 (1, 'No disponibilidad de Camas'),
 (2, 'No convenino con EPS'),
 (3, 'No se dispone de la especialidad');
@@ -1304,7 +1305,7 @@ CREATE TABLE "Diagnosticos" (
 --Falta Insertar Los registros de los diagnosticos
 
 CREATE TABLE "Especialidades" (
-	id smallint NOT NULL,
+	id serial NOT NULL,
 	nombre character varying(500) NOT NULL,
 	CONSTRAINT "esp_pkey" PRIMARY KEY (id)
 );
@@ -1356,6 +1357,111 @@ INSERT INTO "Especialidades" (id, nombre) VALUES
 (44, 'Urología');
 
 --
+
+CREATE TABLE "Ips" (
+	id serial NOT NULL,
+	nombre text NOT NULL,
+	nit character varying(15) NOT NULL,
+	correo text NOT NULL,
+	telefono integer NOT NULL,
+	CONSTRAINT "ips_pkey" PRIMARY KEY (id)
+);
+
+INSERT INTO "Ips" (id, nombre, nit, correo, telefono) VALUES
+(1,'Hospital Departamental Universitario Santa Sofia de Caldas','890801099-5','santasofia@santasofia.com.co',8879200);
+
+--
+
+CREATE TABLE "Roles" (
+	id serial NOT NULL,
+	nombre character varying (50) NOT NULL,
+	CONSTRAINT "rol_pkey" PRIMARY KEY (id)
+);
+
+INSERT INTO "Roles" (id, nombre) VALUES
+(1,'Administrador'),
+(2,'Medico'),
+(3,'Referente');
+
+--
+
+CREATE TABLE "Usuarios" (
+	id serial NOT NULL,
+	usuario character varying (100) NOT NULL,
+	clave character varying (20) NOT NULL,
+	ips integer NOT NULL,
+	rol integer NOT NULL,
+	CONSTRAINT "usuario_pkey" PRIMARY KEY (id)
+);
+
+ALTER TABLE "Usuarios"
+  ADD CONSTRAINT "Usuarios_fk_ips" FOREIGN KEY ("ips") REFERENCES public."Ips" ("id"),
+  ADD CONSTRAINT "Usuarios_fk_rol" FOREIGN KEY ("rol") REFERENCES public."Roles" ("id");
+
+INSERT INTO "Usuarios" (id, usuario, clave, ips, rol) VALUES
+(1,'JOAOSZA','admin',1,1);
+
+--
+
+CREATE TABLE "Referencias" (
+	id serial NOT NULL,
+	fecha_solicitud timestamp without time zone NOT NULL,
+	tipdoc_p integer NOT NULL,
+	documento_p integer NOT NULL,
+	nombre1_p character varying(20) NOT NULL,
+	nombre2_p character varying(20),
+	apellido1_p character varying(20) NOT NULL,
+	apellido2_p character varying(20),
+	fecha_n date NOT NULL,
+	edad integer NOT NULL,
+	sexo character varying(1) NOT NULL,
+	lugar_nacimiento integer NOT NULL,
+	regimen integer NOT NULL,
+	eps integer NOT NULL,
+	diagnostico integer NOT NULL,
+	especialidad integer NOT NULL,
+	tipo_atencion integer NOT NULL,
+	aislamiento character varying (1) NOT NULL,
+	num_autorizacion integer NOT NULL,
+	tipdoc_a integer NOT NULL,
+	documento_a integer NOT NULL,
+	nombre1_a character varying(20) NOT NULL,
+	nombre2_a character varying(20),
+	apellido1_a character varying(20) NOT NULL,
+	apellido2_a character varying(20),
+	direccion text NOT NULL,
+	telefono integer NOT NULL,
+	parentesco character varying(30) NOT NULL,
+	observaciones text,
+	nom_medico character varying(100) NOT NULL,
+	regpro_medico text NOT NULL,
+	anexo1 bytea,
+	anexo2 bytea,
+	anexo3 bytea,
+	anexo4 bytea,
+	anexo5 bytea,
+	usuario_referente integer NOT NULL,
+	estado integer NOT NULL,
+	tipo_rechazo integer,
+	fecha_estado timestamp without time zone,
+	usuario_resp_solicitud integer,
+	CONSTRAINT "ref_pkey" PRIMARY KEY (id)
+);
+
+ALTER TABLE "Referencias"
+	ADD CONSTRAINT "Referencias_fk_tipdoc_p" FOREIGN KEY ("tipdoc_p") REFERENCES public."Tipo_Documentos" ("id"),
+	ADD CONSTRAINT "Referencias_fk_municipio" FOREIGN KEY ("lugar_nacimiento") REFERENCES public."Municipios" ("id"),
+	ADD CONSTRAINT "Referencias_fk_regimen" FOREIGN KEY ("regimen") REFERENCES public."Regimen_Eps" ("id"),
+	ADD CONSTRAINT "Referencias_fk_eps" FOREIGN KEY ("eps") REFERENCES public."Eps" ("id"),
+	ADD CONSTRAINT "Referencias_fk_dx" FOREIGN KEY ("diagnostico") REFERENCES public."Diagnosticos" ("id"),
+	ADD CONSTRAINT "Referencias_fk_especialidad" FOREIGN KEY ("especialidad") REFERENCES public."Especialidades" ("id"),
+	ADD CONSTRAINT "Referencias_fk_tipatencion" FOREIGN KEY ("tipo_atencion") REFERENCES public."Tipo_Atenciones" ("id"),
+	ADD CONSTRAINT "Referencias_fk_tipdoc_a" FOREIGN KEY ("tipdoc_a") REFERENCES public."Tipo_Documentos" ("id"),
+	ADD CONSTRAINT "Referencias_fk_usuario_ref" FOREIGN KEY ("usuario_referente") REFERENCES public."Usuarios" ("id"),
+	ADD CONSTRAINT "Referencias_fk_estado" FOREIGN KEY ("estado") REFERENCES public."Estado_Referencia" ("id"),
+	ADD CONSTRAINT "Referencias_fk_rechazo" FOREIGN KEY ("tipo_rechazo") REFERENCES public."Tipo_Rechazos" ("id"),
+	ADD CONSTRAINT "Referencias_fk_usuario_resp" FOREIGN KEY ("usuario_resp_solicitud") REFERENCES public."Usuarios" ("id");
+
 
 
 
