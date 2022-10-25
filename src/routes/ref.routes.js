@@ -70,10 +70,10 @@ function validateToken(req, res, next){
 }
 
 
-router.get('/Referencias', getReferencias);
-router.get('/Referencia/:id', getReferencia);
+router.get('/Referencias', validateToken, getReferencias);
+router.get('/Referencia/', getReferencia);
 router.post('/Referencias', createReferencia);
-router.put('/Referencias/:id', updateReferencia);
-router.delete('/Referencias/:id', deleteReferencia);
+router.put('/Referencias', updateReferencia);
+router.delete('/Referencias', deleteReferencia);
 
 module.exports = router;
